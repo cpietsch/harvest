@@ -1,6 +1,7 @@
 <template>
   <div class="panel">
-    <div v-bind:style="{ width: width + 'px', height: height + 'px' }">
+    <!-- <div v-bind:style="{ width: width + 'px', height: height + 'px' }"> -->
+    <div>
       <h3>{{ title }}</h3>
       <h4>{{ value }} {{ unit }}</h4>
     </div>
@@ -21,25 +22,29 @@ export default {
 
   .panel {
     padding: 20px;
-    margin: 20px;
+    margin: 10px;
     background: #151515;
     display: block;
     float: left;
+    width: 500px;
   }
 
   h3 {
     text-transform: uppercase;
-    font-size: 1.4em;
+    font-size: 1.2em;
     color: #696969;
     margin: 0;
     margin-bottom: 10px;
+    float: left;
   }
   h4 {
-    font-size: 1.3em;
+    padding-left: 1em;
+    font-size: 1.2em;
     font-weight: normal;
     color: #585858;
     margin: 0;
     margin-bottom: 10px;
+    float: right;
   }
 
 </style>

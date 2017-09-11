@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <input type="text" v-model="addr"> -->
-    <button v-on:click="polling = !polling">{{polling}}</button>
+    <!-- <button v-on:click="polling = !polling">{{polling}}</button> -->
     <linechart
       v-if="history"
       title="Hashrate History"
@@ -28,6 +28,13 @@
     />
     <panel
       v-if="user"
+      title="account"
+      width="200"
+      unit=""
+      :value="user.account"
+    />
+    <panel
+      v-if="user"
       title="Unconfirmed Balance"
       width="200"
       unit="zec"
@@ -41,19 +48,61 @@
       :value="user.balance"
     />
     <panel
-      v-if="user"
-      title="account"
-      width="200"
-      unit=""
-      :value="user.account"
-    />
-    <panel
       v-if="lastblocknumber"
       title="last block number"
       width="200"
       unit=""
       :value="lastblocknumber"
-    /> 
+    />
+    <panel
+      v-if="avgblocktime"
+      title="avg blocktime"
+      width="200"
+      unit="sec"
+      :value="avgblocktime"
+    />
+    <panel
+      v-if="prices"
+      title="ZEC Price"
+      width="200"
+      unit="€"
+      :value="prices.price_eur"
+    />
+    <panel
+      v-if="prices"
+      title="zec Price"
+      width="200"
+      unit="btc"
+      :value="prices.price_btc"
+    />
+    <panel
+      v-if="prices"
+      title="zec Price"
+      width="200"
+      unit="$"
+      :value="prices.price_usd"
+    />
+    <panel
+      v-if="payments"
+      title="payouts"
+      width="200"
+      unit=""
+      :value="payments.length"
+    />
+    <panel
+      v-if="totalpayout"
+      title="total mined"
+      width="200"
+      unit="zec"
+      :value="totalpayout"
+    />
+    <panel
+      v-if="totalpayout"
+      title="total mined"
+      width="200"
+      unit="€"
+      :value="totalpayout * prices.price_eur"
+    />
   </div>
 </template>
 
@@ -113,7 +162,10 @@ export default {
       ),
       prices: this.reactivelyFetchData(() => 
         `${this.url}/prices?${this.timepoll}`
-      )
+      ),
+      totalpayout: this.$watchAsObservable(() => this.payments)
+        .pluck('newValue')
+        .map(payouts => payouts.reduce((a,c) => a + c.amount, 0))
     }
   },
   computed: {
