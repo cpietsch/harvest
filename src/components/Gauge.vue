@@ -58,7 +58,8 @@ export default {
     padding: 20px;
     margin: 20px;
     background: #151515;
-    display: inline-block;
+    display: block;
+    float: left;
   }
 
   h3 {

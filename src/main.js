@@ -3,10 +3,30 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import AsyncComputed from 'vue-async-computed'
+import Rx from 'rxjs/Rx'
+import VueRx from 'vue-rx'
 
-Vue.use(AsyncComputed)
+Vue.use(VueRx, Rx)
 Vue.config.productionTip = false
+
+const fetchJson = url => {
+  return fetch(url)
+}
+
+Vue.prototype.$reactivelyFetchData = function (urlOrGetter) {
+  return this
+    .$watchAsObservable(urlOrGetter)
+    .pluck('newValue')
+    .switchMap(url => Rx.Observable
+      .fromPromise(fetch(url).then(r => r.json()))
+      .catch((e) => {
+        console.log("api fetch error", e)
+        return Rx.Observable.of({ status: false })
+      })
+    )
+    .filter(r => r.status)
+    .map(r => r.data)
+}
 
 /* eslint-disable no-new */
 new Vue({

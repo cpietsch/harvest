@@ -54,7 +54,7 @@ export default {
     padding: 20px;
     margin: 20px;
     background: #151515;
-    display: inline-block;
+    float: left;
   }
 
   .chart h3 {
