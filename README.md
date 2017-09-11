@@ -1,6 +1,7 @@
 # harvest
 
 > zec cash mining dashboard for the harvest project using nanopool.org
+
 > https://cpietsch.github.io/harvest/#/ or https://cpietsch.github.io/harvest/#/vis/WALLETADDRESS
 
 ## Build Setup
