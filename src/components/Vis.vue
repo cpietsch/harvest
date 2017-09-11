@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- <input type="text" v-model="addr"> -->
+    <button v-on:click="polling = !polling">{{polling}}</button>
     <linechart
       v-if="history"
       title="Hashrate History"
@@ -63,6 +64,8 @@ import Gauge from './Gauge'
 import Panel from './Panel'
 import Rx from 'rxjs/Rx'
 
+const parseDate = (date) => new Date(date * 1000)
+
 export default {
   name: 'vis',
   components: { Linechart, Gauge, Panel },
@@ -83,8 +86,8 @@ export default {
       lastblocknumber: this.reactivelyFetchData(() => 
         `${this.url}/network/lastblocknumber/?${this.timepoll}`
       ),
-      lastblock: this.reactivelyFetchData(() => 
-        `${this.url}/blocks/lastblocknumber/${this.lastblocknumber}/1`
+      lastblocks: this.reactivelyFetchData(() => 
+        `${this.url}/blocks/${this.lastblocknumber}/10`
       ),
       history: this.reactivelyFetchData(() => 
         `${this.url}/history/${this.addr}?${this.timepoll}`
@@ -93,7 +96,7 @@ export default {
           data.sort((a,b) => a.date - b.date)
           return data.map(d => {
             return {
-              date: this.parseDate(d.date),
+              date: parseDate(d.date),
               value: d.hashrate
             }
           })
@@ -119,12 +122,6 @@ export default {
     }
   },
   methods: {
-    parseDate(date) {
-      return new Date(date * 1000)
-    },
-    poll() {
-      this.timepoll = +new Date()
-    },
     reactivelyFetchData: function (getter) {
       return this
         .$watchAsObservable(getter)
