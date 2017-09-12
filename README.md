@@ -2,6 +2,8 @@
 
 > zec cash mining dashboard for the harvest project using nanopool.org
 
+> https://cpietsch.github.io/harvest/#/ or https://cpietsch.github.io/harvest/#/vis/WALLETADDRESS
+
 ## Build Setup
 
 ``` bash
@@ -17,3 +19,10 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+
+## TODOs
+
+- detailed blocklist stats
+- detailed payout stats
+- windspeed csv
+- nvidia csv 
