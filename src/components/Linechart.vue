@@ -1,9 +1,10 @@
 <template>
   <div class="chart">
-    <h3 :style="{marginLeft: margin.left + 'px'}">{{ title }}</h3>
+    <h3>{{ title }}</h3>
      <svg :width="width" :height="height">
-      <g :transform="transform">
+      <g>
         <axisright :scale="scaleY" :width="width" :height="height" :margin="margin" class="axis"/>
+        <axisbottom :scale="scaleX" :width="width" :height="height" :margin="margin" class="axis axisx"/>
         <path :d="linePath" />
       </g>
     </svg>
@@ -13,11 +14,12 @@
 <script>
 import { scaleLinear, scaleTime, scaleLog, line, extent, select, axisLeft, axisRight } from 'd3'
 import Axisright from './Axisright.js'
+import Axisbottom from './Axisbottom.js'
 
 export default {
   name: 'linechart',
   props: ['data', 'width', 'height', 'margin', 'title'],
-  components: { Axisright },
+  components: { Axisright, Axisbottom },
   computed: {
     extentX: function() {
       return extent(this.data, d => d.date)
@@ -51,31 +53,36 @@ export default {
 <style>
 
   .chart {
-    padding: 20px;
-    margin: 20px;
-    background: #151515;
+    padding: 3em;
+    margin: 2em;
+    background: rgba(113, 113, 113, 0.17);
     float: left;
   }
 
   .chart h3 {
     text-transform: uppercase;
-    font-size: 1.4em;
+    font-size: 1.9em;
     color: #696969;
     margin: 0;
-    margin-bottom: 10px;
+    margin-bottom: 1em;
   }
 
   .chart path {
     fill: none;
     stroke: #6cf391;
-    stroke-width: 2px;
+    stroke-width: 0.2em;
   }
 
   .chart .axis line {
     stroke: #444444;
+    stroke-width: 2px;
   }
   .chart .axis text {
     fill: #999;
-    font-family: 'Cousine'
+    font-family: 'Cousine';
+    font-size: 1.5em;
+  }
+  .chart .axisx line {
+    stroke-dasharray: 5 5;
   }
 </style>

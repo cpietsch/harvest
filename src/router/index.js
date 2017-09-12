@@ -7,7 +7,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/vis/:addr',
+      path: '/vis/:addr/:view',
       name: 'Vis',
       component: Vis
     },

@@ -23,7 +23,7 @@ export default {
   .panel {
     padding: 20px;
     margin: 10px;
-    background: #151515;
+    background: rgba(111, 111, 111, 0.19);
     display: block;
     float: left;
     width: 500px;
@@ -40,8 +40,8 @@ export default {
   h4 {
     padding-left: 1em;
     font-size: 1.2em;
-    font-weight: normal;
-    color: #585858;
+    font-weight: 600;
+    color: #ececec;
     margin: 0;
     margin-bottom: 10px;
     float: right;

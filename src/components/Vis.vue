@@ -2,107 +2,111 @@
   <div>
     <!-- <input type="text" v-model="addr"> -->
     <!-- <button v-on:click="polling = !polling">{{polling}}</button> -->
-    <linechart
+    <div v-if="view === 'graph'">
+      <linechart
       v-if="history"
       title="Hashrate History"
-      width="900"
-      height="300"
+      width="1750"
+      height="900"
       :data="history"
-      :margin="{top: 20, right: 60, bottom: 10, left: 10}"
+      :margin="{top: 20, right: 80, bottom: 30, left: 10}"
     />
-    <gauge
-      v-if="user"
-      title="Hashrate"
-      width="200"
-      height="200"
-      unit="sol/s"
-      :value="user.hashrate"
-      :max="user.avgHashrate.h3"
-    />
-    <gauge
-      title="windspeed"
-      width="200"
-      height="200"
-      unit="km/s"
-      :value="14"
-    />
-    <panel
-      v-if="user"
-      title="account"
-      width="200"
-      unit=""
-      :value="user.account"
-    />
-    <panel
-      v-if="user"
-      title="Unconfirmed Balance"
-      width="200"
-      unit="zec"
-      :value="user.unconfirmed_balance"
-    />
-    <panel
-      v-if="user"
-      title="Balance"
-      width="200"
-      unit="zec"
-      :value="user.balance"
-    />
-    <panel
-      v-if="lastblocknumber"
-      title="last block number"
-      width="200"
-      unit=""
-      :value="lastblocknumber"
-    />
-    <panel
-      v-if="avgblocktime"
-      title="avg blocktime"
-      width="200"
-      unit="sec"
-      :value="avgblocktime"
-    />
-    <panel
-      v-if="prices"
-      title="ZEC Price"
-      width="200"
-      unit="€"
-      :value="prices.price_eur"
-    />
-    <panel
-      v-if="prices"
-      title="zec Price"
-      width="200"
-      unit="btc"
-      :value="prices.price_btc"
-    />
-    <panel
-      v-if="prices"
-      title="zec Price"
-      width="200"
-      unit="$"
-      :value="prices.price_usd"
-    />
-    <panel
-      v-if="payments"
-      title="payouts"
-      width="200"
-      unit=""
-      :value="payments.length"
-    />
-    <panel
-      v-if="totalpayout"
-      title="total mined"
-      width="200"
-      unit="zec"
-      :value="totalpayout"
-    />
-    <panel
-      v-if="totalpayout"
-      title="total mined"
-      width="200"
-      unit="€"
-      :value="totalpayout * prices.price_eur"
-    />
+    </div>
+    <div v-if="view === 'dashboard'">
+      <gauge
+        v-if="user"
+        title="Hashrate"
+        width="200"
+        height="200"
+        unit="sol/s"
+        :value="user.hashrate"
+        :max="user.avgHashrate.h3"
+      />
+      <gauge
+        title="windspeed"
+        width="200"
+        height="200"
+        unit="km/s"
+        :value="14"
+      />
+      <panel
+        v-if="user"
+        title="account"
+        width="200"
+        unit=""
+        :value="user.account"
+      />
+      <panel
+        v-if="user"
+        title="Unconfirmed Balance"
+        width="200"
+        unit="zec"
+        :value="user.unconfirmed_balance"
+      />
+      <panel
+        v-if="user"
+        title="Balance"
+        width="200"
+        unit="zec"
+        :value="user.balance"
+      />
+      <panel
+        v-if="lastblocknumber"
+        title="last block number"
+        width="200"
+        unit=""
+        :value="lastblocknumber"
+      />
+      <panel
+        v-if="avgblocktime"
+        title="avg blocktime"
+        width="200"
+        unit="sec"
+        :value="avgblocktime"
+      />
+      <panel
+        v-if="prices"
+        title="zec Price"
+        width="200"
+        unit="btc"
+        :value="prices.price_btc"
+      />
+      <panel
+        v-if="prices"
+        title="zec Price"
+        width="200"
+        unit="€"
+        :value="prices.price_eur"
+      />
+      <panel
+        v-if="prices"
+        title="zec Price"
+        width="200"
+        unit="$"
+        :value="prices.price_usd"
+      />
+      <panel
+        v-if="payments"
+        title="payouts"
+        width="200"
+        unit=""
+        :value="payments.length"
+      />
+      <panel
+        v-if="totalpayout"
+        title="total mined"
+        width="200"
+        unit="zec"
+        :value="totalpayout"
+      />
+      <panel
+        v-if="totalpayout"
+        title="total mined"
+        width="200"
+        unit="$"
+        :value="totalpayout"
+      />
+    </div>
   </div>
 </template>
 
@@ -166,12 +170,16 @@ export default {
       totalpayout: this.$watchAsObservable(() => this.payments)
         .pluck('newValue')
         .map(payouts => payouts.reduce((a,c) => a + c.amount, 0))
+        .map(amount => amount * this.prices.price_eur)
     }
   },
   computed: {
     addr: function(){
       return this.$route.params.addr || 't1brhGiJhFEj2vnxN8gSrxLdokjgJLzSpsU'
-    }
+    },
+    view: function(){
+      return this.$route.params.view || 'graph'
+    },
   },
   methods: {
     reactivelyFetchData: function (getter) {

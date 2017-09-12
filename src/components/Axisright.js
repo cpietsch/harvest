@@ -1,4 +1,6 @@
-import { scaleLinear, scaleTime, line, extent, select, axisLeft, axisRight } from 'd3'
+import { scaleLinear, scaleTime, line, extent, select, format, axisRight } from 'd3'
+
+const formatNumber = format(",.2r")
 
 export default {
   name: 'axisright',
@@ -7,6 +9,9 @@ export default {
     axis: function() {
       return axisRight(this.scale)
         .tickSize(this.width- this.margin.left - this.margin.right)
+        .tickFormat((d,i) => {
+          return d == 0 ? '0 sol/s' : formatNumber(d)
+        })
     }
   },
   render: function (createElement) {
