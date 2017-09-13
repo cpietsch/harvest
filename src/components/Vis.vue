@@ -4,13 +4,13 @@
     <!-- <button v-on:click="polling = !polling">{{polling}}</button> -->
     <div v-if="view === 'graph'">
       <linechart
-      v-if="history"
-      title="Hashrate History"
-      width="1750"
-      height="900"
-      :data="history"
-      :margin="{top: 20, right: 80, bottom: 30, left: 10}"
-    />
+        v-if="history"
+        title="Hashrate History"
+        width="1750"
+        height="900"
+        :data="history"
+        :margin="{top: 20, right: 80, bottom: 30, left: 10}"
+      />
     </div>
     <div v-if="view === 'dashboard'">
       <gauge
@@ -24,85 +24,89 @@
       />
       <gauge
         title="windspeed"
-        width="200"
         height="200"
-        unit="km/s"
-        :value="14"
+        width="200"
+        unit="m/s"
+        :value="9"
       />
       <panel
         v-if="user"
-        title="account"
-        width="200"
+        title="address"
         unit=""
         :value="user.account"
       />
       <panel
         v-if="user"
         title="Unconfirmed Balance"
-        width="200"
         unit="zec"
         :value="user.unconfirmed_balance"
       />
       <panel
         v-if="user"
         title="Balance"
-        width="200"
         unit="zec"
         :value="user.balance"
       />
       <panel
+        title="outside temperature"
+        unit="°C"
+        :value="19"
+      />
+      <panel
+        title="GPU load"
+        unit="W"
+        :value="242"
+      />
+      <panel
+        title="GPU temp"
+        unit="°C"
+        :value="67"
+      />
+      <panel
+        v-if="payments"
+        title="payouts"
+        unit=""
+        :value="payments.length"
+      />
+      <panel
         v-if="lastblocknumber"
         title="last block number"
-        width="200"
         unit=""
         :value="lastblocknumber"
       />
       <panel
         v-if="avgblocktime"
         title="avg blocktime"
-        width="200"
         unit="sec"
         :value="avgblocktime"
       />
       <panel
         v-if="prices"
         title="zec Price"
-        width="200"
         unit="btc"
         :value="prices.price_btc"
       />
       <panel
         v-if="prices"
         title="zec Price"
-        width="200"
         unit="€"
         :value="prices.price_eur"
       />
       <panel
         v-if="prices"
         title="zec Price"
-        width="200"
         unit="$"
         :value="prices.price_usd"
       />
       <panel
-        v-if="payments"
-        title="payouts"
-        width="200"
-        unit=""
-        :value="payments.length"
-      />
-      <panel
         v-if="totalpayout"
         title="total mined"
-        width="200"
         unit="zec"
         :value="totalpayout"
       />
       <panel
         v-if="totalpayout"
         title="total mined"
-        width="200"
         unit="$"
         :value="totalpayout"
       />
@@ -111,7 +115,7 @@
 </template>
 
 <script>
-import { json } from 'd3'
+import { json, csvParseRows } from 'd3'
 import Linechart from './Linechart'
 import Gauge from './Gauge'
 import Panel from './Panel'
@@ -125,8 +129,9 @@ export default {
   data () {
     return {
       url: 'https://api.nanopool.org/v1/zec',
-      polling: false,
-      pollingTime: 10000
+      polling: true,
+      pollingTime: 30000,
+      csvUrl: 'https://julianoliver.com/harvest/nodes/node1.csv'
     }
   },
   subscriptions () {
@@ -136,13 +141,16 @@ export default {
         .takeWhile((v) => this.polling ? true : v === 0)
         .map((a) => +new Date())
       ,
-      lastblocknumber: this.reactivelyFetchData(() => 
+      // csv: this.reactivelyFetchCsv(() => {
+      //   `${this.csvUrl}?${this.timepoll}`
+      // }),
+      lastblocknumber: this.reactivelyFetchData(() =>
         `${this.url}/network/lastblocknumber/?${this.timepoll}`
       ),
-      lastblocks: this.reactivelyFetchData(() => 
+      lastblocks: this.reactivelyFetchData(() =>
         `${this.url}/blocks/${this.lastblocknumber}/10`
       ),
-      history: this.reactivelyFetchData(() => 
+      history: this.reactivelyFetchData(() =>
         `${this.url}/history/${this.addr}?${this.timepoll}`
         )
         .map(data => {
@@ -155,16 +163,16 @@ export default {
           })
         })
       ,
-      user: this.reactivelyFetchData(() => 
+      user: this.reactivelyFetchData(() =>
         `${this.url}/user/${this.addr}?${this.timepoll}`
       ),
-      payments: this.reactivelyFetchData(() => 
+      payments: this.reactivelyFetchData(() =>
         `${this.url}/payments/${this.addr}?${this.timepoll}`
       ),
-      avgblocktime: this.reactivelyFetchData(() => 
+      avgblocktime: this.reactivelyFetchData(() =>
         `${this.url}/network/avgblocktime?${this.timepoll}`
       ),
-      prices: this.reactivelyFetchData(() => 
+      prices: this.reactivelyFetchData(() =>
         `${this.url}/prices?${this.timepoll}`
       ),
       totalpayout: this.$watchAsObservable(() => this.payments)
@@ -175,10 +183,10 @@ export default {
   },
   computed: {
     addr: function(){
-      return this.$route.params.addr || 't1brhGiJhFEj2vnxN8gSrxLdokjgJLzSpsU'
+      return this.$route.params.addr || '31o2tiFd3anrB7KWLhNvCFyx9WnxAWkZUr'
     },
     view: function(){
-      return this.$route.params.view || 'graph'
+      return this.$route.params.view || 'dashboard'
     },
   },
   methods: {
@@ -195,6 +203,23 @@ export default {
         )
         .filter(r => r.status)
         .map(r => r.data)
+    },
+    reactivelyFetchCsv: function (getter) {
+      return this
+        .$watchAsObservable(getter)
+        .pluck('newValue')
+        .switchMap(url => Rx.Observable
+          .fromPromise(fetch(url).then(r => r.text()))
+          .catch((e) => {
+            console.log("api fetch error", e)
+            return Rx.Observable.of({ status: false })
+          })
+        )
+        .do(d => { console.log(d) })
+        // 9  19  242 67
+        // wind speed (m/s), outside temperature (C), GPU load (watts), GPU temp (C)
+        // .filter(r => r.status)
+        // .map(r => r.data)
     }
   },
   beforeDestroy () {

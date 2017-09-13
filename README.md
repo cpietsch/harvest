@@ -33,4 +33,6 @@ npm run build --report
 - detailed blocklist stats
 - detailed payout stats
 - windspeed csv
-- nvidia csv 
+- nvidia csv
+
+> https://min-api.cryptocompare.com/data/histoday?fsym=ZEC&tsym=EUR&limit=200&aggregate=1
