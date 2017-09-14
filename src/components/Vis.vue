@@ -7,7 +7,7 @@
         v-if="history"
         title="Hashrate History"
         width="1750"
-        height="900"
+        height="820"
         :data="history"
         :margin="{top: 20, right: 80, bottom: 30, left: 10}"
       />
@@ -16,19 +16,35 @@
       <gauge
         v-if="user"
         title="Hashrate"
-        width="200"
-        height="200"
+        width="255"
+        height="246"
         unit="sol/s"
         :value="user.hashrate"
-        :max="user.avgHashrate.h3"
       />
       <gauge
+        v-if="stats"
         title="windspeed"
-        height="200"
-        width="200"
+        width="255"
+        height="246"
         unit="m/s"
-        :value="9"
+        :value="stats.windspeed"
       />
+     <!--  <gauge
+        v-if="stats"
+        title="GPU temperature"
+        width="255"
+        height="246"
+        unit="°C"
+        :value="stats.gputemp"
+      />
+      <gauge
+        v-if="stats"
+        title="GPU LOAD"
+        width="255"
+        height="246"
+        unit="W"
+        :value="stats.load"
+      /> -->
       <panel
         v-if="user"
         title="address"
@@ -48,19 +64,22 @@
         :value="user.balance"
       />
       <panel
+        v-if="stats"
         title="outside temperature"
         unit="°C"
-        :value="19"
+        :value="stats.outsidetemp"
       />
       <panel
+        v-if="stats"
         title="GPU load"
         unit="W"
-        :value="242"
+        :value="stats.load"
       />
       <panel
+        v-if="stats"
         title="GPU temp"
         unit="°C"
-        :value="67"
+        :value="stats.gputemp"
       />
       <panel
         v-if="payments"
@@ -110,28 +129,35 @@
         unit="$"
         :value="totalpayout"
       />
+      <list
+        v-if="lastblocks"
+        title="Last block"
+        :data="lastblocks"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { json, csvParseRows } from 'd3'
+import { json, csvParseRows, text } from 'd3'
 import Linechart from './Linechart'
 import Gauge from './Gauge'
 import Panel from './Panel'
+import List from './List'
 import Rx from 'rxjs/Rx'
 
 const parseDate = (date) => new Date(date * 1000)
 
 export default {
   name: 'vis',
-  components: { Linechart, Gauge, Panel },
+  components: { Linechart, Gauge, Panel, List },
   data () {
     return {
       url: 'https://api.nanopool.org/v1/zec',
       polling: true,
       pollingTime: 30000,
-      csvUrl: 'https://julianoliver.com/harvest/nodes/node1.csv'
+      csvUrl: 'https://julianoliver.com/harvest/nodes/node1.csv',
+      stats: null
     }
   },
   subscriptions () {
@@ -140,15 +166,13 @@ export default {
         .timer(0, this.pollingTime)
         .takeWhile((v) => this.polling ? true : v === 0)
         .map((a) => +new Date())
+        .do(a => { this.getStats() }) // super hacky
       ,
-      // csv: this.reactivelyFetchCsv(() => {
-      //   `${this.csvUrl}?${this.timepoll}`
-      // }),
       lastblocknumber: this.reactivelyFetchData(() =>
         `${this.url}/network/lastblocknumber/?${this.timepoll}`
       ),
       lastblocks: this.reactivelyFetchData(() =>
-        `${this.url}/blocks/${this.lastblocknumber}/10`
+        `${this.url}/blocks/${this.lastblocknumber}/100`
       ),
       history: this.reactivelyFetchData(() =>
         `${this.url}/history/${this.addr}?${this.timepoll}`
@@ -178,7 +202,12 @@ export default {
       totalpayout: this.$watchAsObservable(() => this.payments)
         .pluck('newValue')
         .map(payouts => payouts.reduce((a,c) => a + c.amount, 0))
-        .map(amount => amount * this.prices.price_eur)
+        .map(amount => (amount * (this.prices ? this.prices.price_eur : 271)))
+      // ,
+      // stats: this.$watchAsObservable(() => this.timepoll)
+      //   .pluck('newValue')
+      //   // .switchMap(Rx.Observable.fromPromise(this.getStats()))
+      //   .do(d => { console.log(d)})
     }
   },
   computed: {
@@ -204,22 +233,21 @@ export default {
         .filter(r => r.status)
         .map(r => r.data)
     },
-    reactivelyFetchCsv: function (getter) {
-      return this
-        .$watchAsObservable(getter)
-        .pluck('newValue')
-        .switchMap(url => Rx.Observable
-          .fromPromise(fetch(url).then(r => r.text()))
-          .catch((e) => {
-            console.log("api fetch error", e)
-            return Rx.Observable.of({ status: false })
+    getStats: function(){
+      const header = ['timestamp', 'windspeed','outsidetemp','gputemp','load']
+      text('https://julianoliver.com/harvest/nodes/node1.csv', text => {
+        const parsed = csvParseRows(text)[0]
+        if(parsed.length) {
+          const data = {}
+          header.forEach((name, i) => {
+            data[name] = parsed[i]
           })
-        )
-        .do(d => { console.log(d) })
-        // 9  19  242 67
-        // wind speed (m/s), outside temperature (C), GPU load (watts), GPU temp (C)
-        // .filter(r => r.status)
-        // .map(r => r.data)
+          data.date = new Date(data.timestamp*1000)
+          this.stats = data
+          // console.log(data)
+          // this.history.push(data)
+        }
+      })
     }
   },
   beforeDestroy () {
@@ -236,5 +264,9 @@ export default {
     font-size: 1.2em;
     border:0;
 
+  }
+
+  body {
+    overflow: hidden;
   }
 </style>
