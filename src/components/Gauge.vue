@@ -5,7 +5,7 @@
       <g :transform="transform">
       <path :d="backgroundArc" class="backgroundArc"/>
       <path :d="arc" class="arc"/>
-      <text>{{ hashrate }} {{ unit }}</text>
+      <text>{{ rounded }} {{ unit }}</text>
       </g>
     </svg>
   </div>
@@ -13,41 +13,72 @@
 
 <script>
 import { select, arc } from 'd3'
+import TWEEN from 'tween'
+
 export default {
   name: 'gauge',
   props: ['value', 'width', 'height', 'title', 'unit'],
   data: function(){
     return {
-      margin: 10,
-      border: 20
+      margin: 5,
+      border: 25,
+      max: 1,
+      animatedNumber: 0
+    }
+  },
+  watch: {
+    value: function(newValue,oldValue){
+      newValue = newValue*1
+      oldValue = oldValue*1
+      console.log(newValue,oldValue)
+      if(newValue > this.max) this.max = newValue
+
+      var vm = this
+      function animate () {
+        if (TWEEN.update()) {
+          requestAnimationFrame(animate)
+        }
+      }
+      new TWEEN.Tween({ tweeningNumber: oldValue })
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .to({ tweeningNumber: newValue }, 2000)
+        .onUpdate(function () {
+          vm.animatedNumber = this.tweeningNumber.toFixed(2)
+        })
+        .start()
+      animate()
     }
   },
   computed: {
-    hashrate: function() {
-      return Math.round(this.value * 10000) / 10000
+    rounded: function() {
+      return Math.round(this.animatedNumber * 10000) / 10000
     },
     transform: function() {
       return `translate(${this.width/2}, ${this.height/2 + this.margin})`
     },
-    angle: function() {
-      return Math.random()
+    percent: function() {
+      return this.animatedNumber / this.max
     },
     arc: function () {
       return arc()
         // .cornerRadius(8)
         .innerRadius(this.width/2 - this.margin - this.border)
         .outerRadius(this.width/2 - this.margin)
-        .startAngle(-Math.PI * 0.8)
-        .endAngle((Math.PI* 0.8) - this.angle)()
+        .startAngle(-Math.PI+0.5)
+        .endAngle(this.percent * (2*Math.PI-1) - Math.PI+0.5)()
     },
     backgroundArc: function(){
       return arc()
         // .cornerRadius(8)
         .innerRadius(this.width/2 - this.margin - this.border)
         .outerRadius(this.width/2 - this.margin)
-        .startAngle(-Math.PI * 0.8)
-        .endAngle(Math.PI* 0.8)()
+        .startAngle(-Math.PI+0.5)
+        .endAngle((Math.PI*2) - (Math.PI+0.5))()
     }
+  },
+  created() {
+    this.max = this.value * 1.1
+    this.animatedNumber = this.value * 1
   }
 }
 </script>
@@ -56,7 +87,7 @@ export default {
 
   .gauge {
     padding: 20px;
-    margin: 20px;
+    margin: 10px;
     background: #151515;
     display: block;
     float: left;
@@ -100,4 +131,13 @@ export default {
     fill: #999;
     font-family: 'Cousine'
   }
+
+/*  background: #151515;
+  animation: Ping 2s ease;
+
+  @keyframes Ping {
+      0%{background: #151515;}
+      50%{background: #EEE}
+      100%{background: #151515;}
+  }*/
 </style>
