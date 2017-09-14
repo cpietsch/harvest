@@ -1,5 +1,5 @@
 <template>
-  <div class="chart">
+  <div class="chartsmall">
     <h3>{{ title }}</h3>
      <svg :width="width" :height="height">
       <g :transform="transform">
@@ -52,7 +52,7 @@ export default {
 
 <style>
 
-  .chart {
+  .chartsmall {
     padding: 15px;
     margin: 10px;
     background: rgba(111, 111, 111, 0.19);
@@ -61,7 +61,7 @@ export default {
     width: 580px;
   }
 
-  .chart h3 {
+  .chartsmall h3 {
     text-transform: uppercase;
     font-size: 1.2em;
     color: #696969;
@@ -71,23 +71,23 @@ export default {
     padding-top: 5px;
   }
 
-  .chart path {
+  .chartsmall path {
     fill: none;
     stroke: #6cf391;
     stroke-width: 0.2em;
   }
 
-  .chart .axis line {
+  .chartsmall .axis line {
     /*stroke: #444444;*/
     stroke: none;
     stroke-width: 1px;
   }
-  .chart .axis text {
+  .chartsmall .axis text {
     fill: #999;
     font-family: 'Cousine';
     font-size: 1em;
   }
-  .chart .axisx line {
+  .chartsmall .axisx line {
     stroke-dasharray: 1 1;
     display: none;
   }
