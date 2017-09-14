@@ -4,13 +4,13 @@ const formatNumber = format(",.2r")
 
 export default {
   name: 'axisright',
-  props: ['scale', 'width', 'height', 'margin'],
+  props: ['scale', 'width', 'height', 'margin', 'unit'],
   computed: {
     axis: function() {
       return axisRight(this.scale)
         .tickSize(this.width- this.margin.left - this.margin.right)
         .tickFormat((d,i) => {
-          return d == 0 ? '0 sol/s' : formatNumber(d)
+          return d == 0 ? '0 ' + this.unit : formatNumber(d)
         })
     }
   },

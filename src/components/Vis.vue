@@ -134,6 +134,15 @@
         title="Last block"
         :data="lastblocks"
       />
+      <linechartsmall
+        v-if="history"
+        title="ZEC price history"
+        width="580"
+        height="168"
+        unit="$"
+        :data="priceHistory"
+        :margin="{top: 0, right: 45, bottom: 20, left: 15}"
+      />
     </div>
   </div>
 </template>
@@ -141,6 +150,7 @@
 <script>
 import { json, csvParseRows, text } from 'd3'
 import Linechart from './Linechart'
+import Linechartsmall from './Linechartsmall'
 import Gauge from './Gauge'
 import Panel from './Panel'
 import List from './List'
@@ -150,14 +160,16 @@ const parseDate = (date) => new Date(date * 1000)
 
 export default {
   name: 'vis',
-  components: { Linechart, Gauge, Panel, List },
+  components: { Linechart, Gauge, Panel, List, Linechartsmall },
   data () {
     return {
       url: 'https://api.nanopool.org/v1/zec',
       polling: true,
       pollingTime: 30000,
       csvUrl: 'https://julianoliver.com/harvest/nodes/node1.csv',
-      stats: null
+      stats: null,
+      priceUrl: 'https://min-api.cryptocompare.com/data/histoday?fsym=ZEC&tsym=EUR&limit=200&aggregate=1',
+      priceHistory: null
     }
   },
   subscriptions () {
@@ -166,7 +178,7 @@ export default {
         .timer(0, this.pollingTime)
         .takeWhile((v) => this.polling ? true : v === 0)
         .map((a) => +new Date())
-        .do(a => { this.getStats() }) // super hacky
+        .do(a => { this.getStats(), this.getPriceHistory() }) // super hacky
       ,
       lastblocknumber: this.reactivelyFetchData(() =>
         `${this.url}/network/lastblocknumber/?${this.timepoll}`
@@ -235,7 +247,7 @@ export default {
     },
     getStats: function(){
       const header = ['timestamp', 'windspeed','outsidetemp','gputemp','load']
-      text('https://julianoliver.com/harvest/nodes/node1.csv', text => {
+      text(this.csvUrl, text => {
         const parsed = csvParseRows(text)[0]
         if(parsed.length) {
           const data = {}
@@ -247,6 +259,16 @@ export default {
           // console.log(data)
           // this.history.push(data)
         }
+      })
+    },
+    getPriceHistory: function(){
+      json(this.priceUrl, data => {
+        this.priceHistory = data.Data.map(d => {
+          return {
+            date: new Date(d.time*1000),
+            value: d.close
+          }
+        })
       })
     }
   },

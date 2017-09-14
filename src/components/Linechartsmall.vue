@@ -2,8 +2,8 @@
   <div class="chart">
     <h3>{{ title }}</h3>
      <svg :width="width" :height="height">
-      <g>
-        <axisright :scale="scaleY" :width="width" :height="height" :margin="margin" class="axis" unit="sol/s" />
+      <g :transform="transform">
+        <axisright :scale="scaleY" :width="width" :height="height" :margin="margin" :unit="unit" class="axis"/>
         <axisbottom :scale="scaleX" :width="width" :height="height" :margin="margin" class="axis axisx"/>
         <path :d="linePath" />
       </g>
@@ -17,8 +17,8 @@ import Axisright from './Axisright.js'
 import Axisbottom from './Axisbottom.js'
 
 export default {
-  name: 'linechart',
-  props: ['data', 'width', 'height', 'margin', 'title'],
+  name: 'linechartsmall',
+  props: ['data', 'width', 'height', 'margin', 'title', 'unit'],
   components: { Axisright, Axisbottom },
   computed: {
     extentX: function() {
@@ -53,18 +53,22 @@ export default {
 <style>
 
   .chart {
-    padding: 3em;
-    margin: 2em;
-    background: rgba(113, 113, 113, 0.17);
+    padding: 15px;
+    margin: 10px;
+    background: rgba(111, 111, 111, 0.19);
+    display: block;
     float: left;
+    width: 580px;
   }
 
   .chart h3 {
     text-transform: uppercase;
-    font-size: 1.9em;
+    font-size: 1.2em;
     color: #696969;
     margin: 0;
-    margin-bottom: 1em;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    padding-top: 5px;
   }
 
   .chart path {
@@ -74,15 +78,17 @@ export default {
   }
 
   .chart .axis line {
-    stroke: #444444;
-    stroke-width: 2px;
+    /*stroke: #444444;*/
+    stroke: none;
+    stroke-width: 1px;
   }
   .chart .axis text {
     fill: #999;
     font-family: 'Cousine';
-    font-size: 1.5em;
+    font-size: 1em;
   }
   .chart .axisx line {
-    stroke-dasharray: 5 5;
+    stroke-dasharray: 1 1;
+    display: none;
   }
 </style>
