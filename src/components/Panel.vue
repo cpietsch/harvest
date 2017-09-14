@@ -1,6 +1,5 @@
 <template>
   <div class="panel">
-    <!-- <div v-bind:style="{ width: width + 'px', height: height + 'px' }"> -->
     <div>
       <h3>{{ title }}</h3>
       <h4>{{ value }} {{ unit }}</h4>
@@ -13,7 +12,7 @@ export default {
   name: 'panel',
   props: ['value', 'width', 'height', 'title', 'unit'],
   computed: {
-    
+
   }
 }
 </script>
@@ -26,7 +25,7 @@ export default {
     background: rgba(111, 111, 111, 0.19);
     display: block;
     float: left;
-    width: 500px;
+    width: 570px;
   }
 
   h3 {
@@ -34,7 +33,6 @@ export default {
     font-size: 1.2em;
     color: #696969;
     margin: 0;
-    margin-bottom: 10px;
     float: left;
   }
   h4 {
@@ -43,7 +41,6 @@ export default {
     font-weight: 600;
     color: #ececec;
     margin: 0;
-    margin-bottom: 10px;
     float: right;
   }
 
