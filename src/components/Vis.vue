@@ -178,7 +178,7 @@ export default {
         .timer(0, this.pollingTime)
         .takeWhile((v) => this.polling ? true : v === 0)
         .map((a) => +new Date())
-        .do(a => { this.getStats(), this.getPriceHistory() }) // super hacky
+        .do(a => { this.getStats() }) // super hacky
       ,
       lastblocknumber: this.reactivelyFetchData(() =>
         `${this.url}/network/lastblocknumber/?${this.timepoll}`
@@ -263,16 +263,20 @@ export default {
     },
     getPriceHistory: function(){
       json(this.priceUrl, data => {
-        this.priceHistory = data.Data.map(d => {
-          return {
-            date: new Date(d.time*1000),
-            value: d.close
-          }
-        })
+        if(data && data.Data){
+          this.priceHistory = data.Data.map(d => {
+            return {
+              date: new Date(d.time*1000),
+              value: d.close
+            }
+          })
+        }
+
       })
     }
   },
-  beforeDestroy () {
+  created () {
+    this.getPriceHistory()
   }
 }
 </script>
