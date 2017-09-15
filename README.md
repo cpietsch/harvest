@@ -1,8 +1,6 @@
 # Harvest
 
-> Zec cash mining dashboard for the harvest project using nanopool.org. 
-
-> This is the [endpoint](https://cpietsch.github.io/harvest/#/) of the realtime visualization for Julian Olivers [HARVEST](https://julianoliver.com/output/harvest) installation.
+> This is the [endpoint](https://cpietsch.github.io/harvest/#/) of the realtime visualization for Julian Olivers [HARVEST](https://julianoliver.com/output/harvest) installation. Using ZEC (zash) nanopool.org and cryptocompare.com API. 
 
 ### View #1
 
