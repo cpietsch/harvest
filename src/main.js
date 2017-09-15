@@ -1,5 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'babel-polyfill'
+import 'whatwg-fetch'
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -13,9 +16,9 @@ const fetchJson = url => {
   return fetch(url)
 }
 
-Vue.prototype.$reactivelyFetchData = function (urlOrGetter) {
+Vue.prototype.$reactivelyFetchData = function (getter) {
   return this
-    .$watchAsObservable(urlOrGetter)
+    .$watchAsObservable(getter)
     .pluck('newValue')
     .switchMap(url => Rx.Observable
       .fromPromise(fetch(url).then(r => r.json()))

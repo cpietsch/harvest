@@ -11,6 +11,7 @@
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "d3": "^4.10.0",
     "eventemitter3": "^2.0.3",
     "gh-pages": "^1.0.0",
@@ -19,7 +20,8 @@
     "vue": "^2.4.2",
     "vue-async-computed": "^3.3.1",
     "vue-router": "^2.6.0",
-    "vue-rx": "^3.4.0"
+    "vue-rx": "^3.4.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
