@@ -24,4 +24,10 @@ export default {
 body {
   background: #000;
 }
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 </style>

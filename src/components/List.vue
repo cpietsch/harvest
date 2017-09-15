@@ -30,7 +30,7 @@ export default {
   computed: {
     block: function(){
       // this.data.sort((a,b)=> b.number - b.number)
-      console.log(this.data)
+      // console.log(this.data)
       return this.data[this.data.length-1]
     }
   },
@@ -65,6 +65,7 @@ export default {
     list-style: none;
     padding: 0;
     word-break: break-all;
+    padding-top: 10px;
   }
   li {
     clear: both;
@@ -74,11 +75,11 @@ export default {
     padding-right: 1em;
     color: #696969;
     float: left;
-    font-weight: bold;
+    /*font-weight: bold;*/
   }
   .value {
     float: right;
-    font-weight: 600;
+    /*font-weight: 600;*/
     color: #ececec;
     width: 400px;
     /*text-align: right;*/

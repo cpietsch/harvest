@@ -58,7 +58,7 @@ export default {
     background: rgba(111, 111, 111, 0.19);
     display: block;
     float: left;
-    width: 580px;
+    width: 570px;
   }
 
   .chartsmall h3 {
@@ -84,7 +84,9 @@ export default {
   }
   .chartsmall .axis text {
     fill: #999;
-    font-family: 'Cousine';
+    /*font-family: 'Cousine';*/
+    font-family: 'Titillium Web';
+    text-transform: uppercase;
     font-size: 1em;
   }
   .chartsmall .axisx line {
