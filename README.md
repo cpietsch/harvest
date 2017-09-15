@@ -1,8 +1,8 @@
 # Harvest
 
-> Zec cash mining dashboard for the harvest project using nanopool.org
+> Zec cash mining dashboard for the harvest project using nanopool.org. 
 
-> https://cpietsch.github.io/harvest/#/
+> This is the [endpoint](https://cpietsch.github.io/harvest/#/) of the realtime visualization for Julian Olivers [HARVEST](https://julianoliver.com/output/harvest) installation.
 
 ### View #1
 
