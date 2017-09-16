@@ -3,10 +3,10 @@
     <div class="intro">
       <h1>HARVEST PROJECTION ENDPOINT</h1>
       <p>
-        This is the endpoint of the realtime projection for <a href="https://julianoliver.com/output/" target="_blank">Julian Olivers</a> HARVEST installation.
+        This is the endpoint of the realtime projection for Julian Olivers <a href="https://julianoliver.com/output/harvest" target="_blank">HARVEST</a> installation.
       </p>
       <p>
-        There are 2 views: <a href="#/vis/31o2tiFd3anrB7KWLhNvCFyx9WnxAWkZUr/graph">hashrate history</a> & <a href="#/vis/31o2tiFd3anrB7KWLhNvCFyx9WnxAWkZUr/dashboard">dashboard</a> both are optimized for full hd. To display your own miner just change the ZEC address in the url to yours.
+        There are 2 views: <a href="#/vis/31o2tiFd3anrB7KWLhNvCFyx9WnxAWkZUr/graph">hashrate history</a> & <a href="#/vis/31o2tiFd3anrB7KWLhNvCFyx9WnxAWkZUr/dashboard">dashboard</a> both are optimized for full hd. To display your own miner just change the ZEC address in the url to yours. You can find the source code on <a href="https://github.com/cpietsch/harvest" target="_blank">GitHub</a>.
       </p>
       <p>
         APIs used: <a href="https://zec.nanopool.org/api" target="_blank">Nanopool</a>, <a href="https://min-api.cryptocompare.com" target="_blank">Cryptocompare</a>
