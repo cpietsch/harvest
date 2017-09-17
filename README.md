@@ -12,9 +12,7 @@
 
 ## Contribute
 
-This little project is also a test bench for vuejs, rxjs and d3 integration. You will see that I used rxjs subscriptions for async api calls like [here](https://github.com/cpietsch/harvest/blob/master/src/components/Graph.vue#L37) but also traditional methods mutating the state [here](https://github.com/cpietsch/harvest/blob/master/src/components/Dashboard.vue#L228). After this rxjs experiment I feel like the standart methods (with e.g. vuex) is way more flexible, though the reactive fetching is quite elegant. Feel free to ping me on that topic!
-
-The d3js - vuejs integration works allright I would say. Like the animated [transitions](https://github.com/cpietsch/harvest/blob/master/src/components/Gauge.vue) or the [axis components](https://github.com/cpietsch/harvest/blob/master/src/components/Axisbottom.js) which are rendered entirely in d3.
+This little project is also a test bench for vuejs, rxjs and d3 integration. You will see that I used rxjs subscriptions for async api calls like [here](https://github.com/cpietsch/harvest/blob/master/src/components/Graph.vue#L37) but also traditional methods mutating the state [here](https://github.com/cpietsch/harvest/blob/master/src/components/Dashboard.vue#L228). After this rxjs experiment I feel like the standart methods (with e.g. vuex) is way more flexible, though the reactive fetching is quite elegant. Feel free to ping me on that topic! The d3js+vuejs integration works smoothly like in animated [transitions](https://github.com/cpietsch/harvest/blob/master/src/components/Gauge.vue) and in the [axis components](https://github.com/cpietsch/harvest/blob/master/src/components/Axisbottom.js).
 
 ## Build Setup
 
