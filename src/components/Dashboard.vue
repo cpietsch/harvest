@@ -85,7 +85,7 @@
     <panel
       v-if="avgblocktime"
       title="avg blocktime"
-      unit="sec"
+      unit="seconds"
       :value="avgblocktime"
     />
     <panel
@@ -113,10 +113,10 @@
       :value="totalpayout"
     />
     <panel
-      v-if="totalpayout"
+      v-if="totalpayout && prices"
       title="total mined"
       unit="$"
-      :value="totalpayout"
+      :value="(totalpayout * prices.price_usd).toFixed(2)"
     />
     <list
       v-if="lastblocks"
@@ -199,8 +199,8 @@ export default {
       ),
       totalpayout: this.$watchAsObservable(() => this.payments)
         .pluck('newValue')
-        .map(payouts => payouts.reduce((a,c) => a + c.amount, 0))
-        .map(amount => (amount * (this.prices ? this.prices.price_eur : 271)))
+        .map(payouts => payouts.reduce((a,c) => a + c.amount, 0).toFixed(4))
+        // .map(amount => (amount * (this.prices ? this.prices.price_eur : 271)))
       // ,
       // stats: this.$watchAsObservable(() => this.timepoll)
       //   .pluck('newValue')

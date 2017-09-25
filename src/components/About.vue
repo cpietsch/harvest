@@ -70,5 +70,6 @@ p {
   width: 1200px;
   left:-6px;
   position: relative;
+  top:60px;
 }
 </style>
