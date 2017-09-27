@@ -115,8 +115,8 @@
     <panel
       v-if="totalpayout && prices"
       title="total mined"
-      unit="$"
-      :value="(totalpayout * prices.price_usd).toFixed(2)"
+      unit="€"
+      :value="(totalpayout * prices.price_eur).toFixed(2)"
     />
     <list
       v-if="lastblocks"
