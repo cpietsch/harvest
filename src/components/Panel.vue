@@ -4,6 +4,7 @@
       <h3>{{ title }}</h3>
       <h4>{{ value }} {{ unit }}</h4>
     </div>
+    <slot></slot>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ export default {
 <style scoped>
 
   .panel {
+    position: relative;
     padding: 20px;
     margin: 10px;
     background: rgba(111, 111, 111, 0.19);

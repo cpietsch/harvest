@@ -42,16 +42,18 @@
     />
     <panel
       v-if="user"
-      title="Unconfirmed Balance"
+      title="Unconfirmed Pool Balance"
       unit="zec"
       :value="user.unconfirmed_balance"
     />
     <panel
       v-if="user"
-      title="Balance"
+      title="Pool Balance"
       unit="zec"
       :value="user.balance"
-    />
+    >
+      <div class="line" :style="{ width: (user.balance / 0.01)*100 + '%'}" />
+    </panel>
     <panel
       v-if="stats"
       title="outside temperature"
@@ -124,7 +126,7 @@
       :data="lastblocks"
     />
     <linechartsmall
-      v-if="history"
+      v-if="priceHistory"
       title="ZEC price history"
       width="550"
       height="173"
@@ -254,6 +256,15 @@ export default {
     font-size: 1.2em;
     border:0;
 
+  }
+
+  .line {
+    height: 2px;
+    width: 0%;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    background: rgb(108, 243, 145);
   }
 
   body {
