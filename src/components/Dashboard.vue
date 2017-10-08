@@ -112,13 +112,19 @@
       v-if="totalpayout"
       title="total mined"
       unit="zec"
-      :value="totalpayout"
+      :value="totalpayout.toFixed(4)"
     />
-    <panel
+    <!-- <panel
       v-if="totalpayout && prices"
       title="total mined"
       unit="€"
       :value="(totalpayout * prices.price_eur).toFixed(2)"
+    /> -->
+    <panel
+      v-if="totalpayoutEur"
+      title="total mined"
+      unit="€"
+      :value="totalpayoutEur"
     />
     <list
       v-if="lastblocks"
@@ -201,13 +207,13 @@ export default {
       ),
       totalpayout: this.$watchAsObservable(() => this.payments)
         .pluck('newValue')
-        .map(payouts => payouts.reduce((a,c) => a + c.amount, 0).toFixed(4))
-        // .map(amount => (amount * (this.prices ? this.prices.price_eur : 271)))
-      // ,
-      // stats: this.$watchAsObservable(() => this.timepoll)
-      //   .pluck('newValue')
-      //   // .switchMap(Rx.Observable.fromPromise(this.getStats()))
-      //   .do(d => { console.log(d)})
+        .map(payouts => payouts.reduce((a,c) => a + c.amount, 0)),
+      totalpayoutEur: this.$watchAsObservable(() => this.totalpayout)
+        .pluck('newValue')
+        .mergeMap(val => {
+          return this.$watchAsObservable(() => this.prices).pluck('newValue').map(d => (val * d.price_eur).toFixed(2))
+        }),
+        // .do(d => { console.log(d)}),
     }
   },
   methods: {
