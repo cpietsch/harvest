@@ -10,14 +10,14 @@
       unit="sol/s"
       :value="user.hashrate"
     />
-    <gauge
+   <!--  <gauge
       v-if="stats"
       title="windspeed"
       width="235"
       height="246"
       unit="m/s"
       :value="stats.windspeed"
-    />
+    /> -->
    <!--  <gauge
       v-if="stats"
       title="GPU temperature"
@@ -90,7 +90,7 @@
       unit="seconds"
       :value="avgblocktime"
     />
-    <panel
+ <!--    <panel
       v-if="prices"
       title="zec Price"
       unit="btc"
@@ -107,7 +107,7 @@
       title="zec Price"
       unit="$"
       :value="prices.price_usd"
-    />
+    /> -->
     <panel
       v-if="totalpayout"
       title="total mined"
