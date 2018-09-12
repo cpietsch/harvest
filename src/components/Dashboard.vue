@@ -162,7 +162,7 @@ export default {
       url: 'https://api.nanopool.org/v1/zec',
       csvUrl: 'https://julianoliver.com/harvest/nodes/node1.csv',
       stats: null,
-      priceUrl: 'https://min-api.cryptocompare.com/data/histoday?fsym=ZEC&tsym=EUR&limit=200&aggregate=1',
+      priceUrl: 'https://min-api.cryptocompare.com/data/histominute?fsym=ZEC&tsym=USD&limit=300',
       priceHistory: null
     }
   },
