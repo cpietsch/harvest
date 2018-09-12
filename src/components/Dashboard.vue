@@ -88,7 +88,7 @@
       v-if="avgblocktime"
       title="avg blocktime"
       unit="seconds"
-      :value="avgblocktime"
+      :value="avgblocktime.toFixed(2)"
     />
  <!--    <panel
       v-if="prices"
