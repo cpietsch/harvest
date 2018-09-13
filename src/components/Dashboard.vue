@@ -3,7 +3,7 @@
     <!-- <input type="text" v-model="addr"> -->
     <!-- <button v-on:click="polling = !polling">{{polling}}</button> -->
     <gauge
-      v-if="user && user.workers"
+      v-if="user && user.workers.length > 0"
       title="Hashrate worker 1"
       width="235"
       height="246"
@@ -11,7 +11,7 @@
       :value="user.workers[0].hashrate"
     />
     <gauge
-      v-if="user && user.workers"
+      v-if="user && user.workers.length > 1"
       title="Hashrate worker 2"
       width="235"
       height="246"
