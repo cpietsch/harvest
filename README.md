@@ -1,6 +1,8 @@
 # Harvest
 
-> This is the [endpoint](https://cpietsch.github.io/harvest/#/) of the realtime visualization for Julian Olivers [HARVEST](https://julianoliver.com/output/harvest) installation. Using ZEC (zash) nanopool.org and cryptocompare.com API. 
+> This is the [endpoint](https://cpietsch.github.io/harvest/#/) of the realtime visualization for Julian Olivers [HARVEST](https://julianoliver.com/output/harvest) installation. Using ZEC (zash) nanopool.org and cryptocompare.com API.
+
+![Harvest](https://julianoliver.com/output/images/harvest/PhotoAlexandraMagnusson2_720.jpg)
 
 ### View #1
 
